@@ -39,7 +39,9 @@ class LoginScreenState extends State<LoginScreen> {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString("token", data["token"]);
 
-      // Verificar si el widget sigue montado antes de usar context
+      // 🔥 Agregado: Imprimir el token en la consola de Flutter
+      print("🔑 TOKEN GUARDADO: ${data["token"]}");
+
       if (!mounted) return;
 
       Navigator.pushReplacementNamed(context, "/home"); // Ir a pantalla principal
