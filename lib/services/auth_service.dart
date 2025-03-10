@@ -17,6 +17,7 @@ class AuthService {
       final data = jsonDecode(response.body);
       await saveToken(data["token"], DateTime.now().add(const Duration(days: 7)).toIso8601String());
 
+      // ignore: avoid_print
       print("✅ Token guardado en SharedPreferences correctamente.");
       return true;
     } else {

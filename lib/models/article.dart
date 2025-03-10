@@ -20,4 +20,24 @@ class Article {
       imageUrl: json['image_url'],
     );
   }
+
+  // 🔄 Convertir el objeto `Article` a un Map (necesario para SQLite)
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'description': description,
+      'imageUrl': imageUrl,
+    };
+  }
+
+  // 🔄 Crear un objeto `Article` desde un Map (para leer desde SQLite)
+  factory Article.fromMap(Map<String, dynamic> map) {
+    return Article(
+      id: map['id'],
+      title: map['title'],
+      description: map['description'],
+      imageUrl: map['imageUrl'],
+    );
+  }
 }
