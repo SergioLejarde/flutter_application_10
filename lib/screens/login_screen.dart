@@ -25,8 +25,10 @@ class LoginScreenState extends State<LoginScreen> {
 
     if (success) {
       final prefs = await SharedPreferences.getInstance();
+      // ignore: avoid_print
       print("🔎 Estado actual de SharedPreferences después del login:");
       prefs.getKeys().forEach((key) {
+        // ignore: avoid_print
         print("$key: ${prefs.get(key)}");
       });
 

@@ -26,7 +26,9 @@ class HomeScreenState extends State<HomeScreen> {
       expiryDate = prefs.getString("token_expiry") ?? "No hay fecha de expiración";
     });
 
+    // ignore: avoid_print
     print("🔑 Token en HomeScreen: $token");
+    // ignore: avoid_print
     print("📅 Fecha de expiración en HomeScreen: $expiryDate");
   }
 

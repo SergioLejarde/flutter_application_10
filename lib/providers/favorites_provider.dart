@@ -10,7 +10,7 @@ class FavoritesProvider with ChangeNotifier {
 
   Future<void> loadFavorites() async {
     _favoriteArticles = await dbHelper.getFavoriteArticles();
-    print("📂 Favoritos en la base de datos: $_favoriteArticles");
+    //print("📂 Favoritos en la base de datos: $_favoriteArticles");
     notifyListeners();
   }
 
@@ -22,11 +22,11 @@ class FavoritesProvider with ChangeNotifier {
     if (isFavorite(article)) {
       _favoriteArticles.removeWhere((fav) => fav.id == article.id);
       await dbHelper.removeFavorite(article.id);
-      print("❌ Eliminado de favoritos: ${article.title}");
+      //print("❌ Eliminado de favoritos: ${article.title}");
     } else {
       _favoriteArticles.add(article);
       await dbHelper.addFavorite(article);
-      print("✅ Añadido a favoritos: ${article.title}");
+      //print("✅ Añadido a favoritos: ${article.title}");
     }
     notifyListeners();
   }

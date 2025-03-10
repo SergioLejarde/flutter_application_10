@@ -8,10 +8,10 @@ class ArticlesScreen extends StatefulWidget {
   const ArticlesScreen({super.key});
 
   @override
-  _ArticlesScreenState createState() => _ArticlesScreenState();
+  ArticlesScreenState createState() => ArticlesScreenState();
 }
 
-class _ArticlesScreenState extends State<ArticlesScreen> {
+class ArticlesScreenState extends State<ArticlesScreen> {
   late Future<List<Article>> articlesFuture;
 
   @override
@@ -61,6 +61,7 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
                             color: isFavorite ? Colors.red : Colors.grey,
                           ),
                           onPressed: () {
+                            // ignore: avoid_print
                             print("🛠 Favorito tocado: ${article.title}");
                             favoritesProvider.toggleFavorite(article);
                           },

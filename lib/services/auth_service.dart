@@ -34,9 +34,10 @@ class AuthService {
 
     // 🔥 Método alternativo para asegurar persistencia
     await prefs.reload();
-    await prefs.commit();
 
+    // ignore: avoid_print
     print("✅ Token guardado con `setStringSync()`: ${prefs.getString("token")}");
+    // ignore: avoid_print
     print("📅 Fecha de expiración guardada: ${prefs.getString("token_expiry")}");
   }
 
