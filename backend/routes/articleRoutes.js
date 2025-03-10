@@ -1,7 +1,13 @@
 const express = require("express");
-const { getAllArticles } = require("../controllers/articleController");
+const authenticateToken = require("../middleware/authMiddleware");
+const { createArticle, getArticles } = require("../controllers/articleController");
+
 const router = express.Router();
 
-router.get("/", getAllArticles);
+// Ruta para obtener artículos (PROTEGIDA)
+router.get("/", authenticateToken, getArticles);
+
+// Ruta para agregar artículos (PROTEGIDA)
+router.post("/", authenticateToken, createArticle);
 
 module.exports = router;
