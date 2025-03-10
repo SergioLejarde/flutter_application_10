@@ -19,8 +19,13 @@ const User = sequelize.define("User", {
   password: {
     type: DataTypes.STRING,
     allowNull: false
+  },
+  token_expiry: {
+    type: DataTypes.DATE,
+    allowNull: true // ✅ Debe permitir valores NULL
   }
 }, {
+ 
   tableName: "users",
   timestamps: false
 });

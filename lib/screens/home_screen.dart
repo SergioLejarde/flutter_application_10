@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../services/auth_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,12 +25,14 @@ class HomeScreenState extends State<HomeScreen> {
       token = prefs.getString("token") ?? "No hay token guardado";
       expiryDate = prefs.getString("token_expiry") ?? "No hay fecha de expiración";
     });
+
+    print("🔑 Token en HomeScreen: $token");
+    print("📅 Fecha de expiración en HomeScreen: $expiryDate");
   }
 
   Future<void> logout(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove("token");
-    await prefs.remove("token_expiry");
+    await AuthService.logout();
+    if (!context.mounted) return;
     Navigator.pushReplacementNamed(context, "/login");
   }
 
@@ -56,6 +59,13 @@ class HomeScreenState extends State<HomeScreen> {
             const Text("📅 EXPIRACIÓN:", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
             Text(expiryDate, textAlign: TextAlign.center, style: const TextStyle(fontSize: 14, color: Colors.red)),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, "/articles");
+              },
+              child: const Text("Ver Artículos"),
+            ),
           ],
         ),
       ),

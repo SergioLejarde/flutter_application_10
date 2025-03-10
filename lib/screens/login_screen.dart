@@ -1,8 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import '../config.dart';
+import '../services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -23,25 +21,14 @@ class LoginScreenState extends State<LoginScreen> {
       errorMessage = "";
     });
 
-    final url = Uri.parse("${Config.apiUrl}/api/auth/login");
-    final response = await http.post(
-      url,
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({
-        "email": emailController.text,
-        "password": passwordController.text
-      }),
-    );
+    bool success = await AuthService.login(emailController.text, passwordController.text);
 
-    final data = jsonDecode(response.body);
-
-    if (response.statusCode == 200) {
+    if (success) {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString("token", data["token"]);
-      await prefs.setString("token_expiry", DateTime.now().add(const Duration(days: 7)).toIso8601String());
-
-      debugPrint("✅ Token guardado: ${data["token"]}");
-      debugPrint("📅 Expira el: ${DateTime.now().add(const Duration(days: 7)).toIso8601String()}");
+      print("🔎 Estado actual de SharedPreferences después del login:");
+      prefs.getKeys().forEach((key) {
+        print("$key: ${prefs.get(key)}");
+      });
 
       if (!mounted) return;
       Navigator.pushReplacementNamed(context, "/home");
