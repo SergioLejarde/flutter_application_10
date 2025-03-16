@@ -37,6 +37,7 @@ class DbHelper {
       article.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    // ignore: avoid_print
     print("✅ Favorito guardado en SQLite: ${article.title} (${article.id})");
   }
 
@@ -44,6 +45,7 @@ class DbHelper {
   Future<void> removeFavorite(int articleId) async {
     final db = await database;
     await db.delete("favorites", where: "id = ?", whereArgs: [articleId]);
+    // ignore: avoid_print
     print("❌ Favorito eliminado de SQLite: ID $articleId");
   }
 
@@ -52,6 +54,7 @@ class DbHelper {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query("favorites");
 
+    // ignore: avoid_print
     print("🗂 Favoritos guardados en SQLite: $maps"); // Debugging info
 
     return List.generate(maps.length, (i) {

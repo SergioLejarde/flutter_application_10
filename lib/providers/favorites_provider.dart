@@ -11,6 +11,7 @@ class FavoritesProvider with ChangeNotifier {
   // 🔄 Cargar favoritos desde SQLite
   Future<void> loadFavorites() async {
     _favoriteArticles = await dbHelper.getFavoriteArticles();
+    // ignore: avoid_print
     print("📂 Favoritos cargados al iniciar: $_favoriteArticles");
     notifyListeners();
   }
@@ -25,10 +26,12 @@ class FavoritesProvider with ChangeNotifier {
     if (isFavorite(article)) {
       _favoriteArticles.removeWhere((fav) => fav.id == article.id);
       await dbHelper.removeFavorite(article.id);
+      // ignore: avoid_print
       print("❌ Eliminado de favoritos: ${article.title}");
     } else {
       _favoriteArticles.add(article);
       await dbHelper.addFavorite(article);
+      // ignore: avoid_print
       print("✅ Añadido a favoritos: ${article.title}");
     }
     notifyListeners();
