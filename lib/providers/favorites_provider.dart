@@ -8,25 +8,28 @@ class FavoritesProvider with ChangeNotifier {
 
   List<Article> get favoriteArticles => _favoriteArticles;
 
+  // 🔄 Cargar favoritos desde SQLite
   Future<void> loadFavorites() async {
     _favoriteArticles = await dbHelper.getFavoriteArticles();
-    //print("📂 Favoritos en la base de datos: $_favoriteArticles");
+    print("📂 Favoritos cargados al iniciar: $_favoriteArticles");
     notifyListeners();
   }
 
+  // ❤️ Verificar si un artículo es favorito
   bool isFavorite(Article article) {
     return _favoriteArticles.any((fav) => fav.id == article.id);
   }
 
-  void toggleFavorite(Article article) async {
+  // 🔄 Alternar entre agregar y eliminar favoritos
+  Future<void> toggleFavorite(Article article) async {
     if (isFavorite(article)) {
       _favoriteArticles.removeWhere((fav) => fav.id == article.id);
       await dbHelper.removeFavorite(article.id);
-      //print("❌ Eliminado de favoritos: ${article.title}");
+      print("❌ Eliminado de favoritos: ${article.title}");
     } else {
       _favoriteArticles.add(article);
       await dbHelper.addFavorite(article);
-      //print("✅ Añadido a favoritos: ${article.title}");
+      print("✅ Añadido a favoritos: ${article.title}");
     }
     notifyListeners();
   }

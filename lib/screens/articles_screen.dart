@@ -18,6 +18,9 @@ class ArticlesScreenState extends State<ArticlesScreen> {
   void initState() {
     super.initState();
     articlesFuture = ArticleService.fetchArticles();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<FavoritesProvider>(context, listen: false).loadFavorites();
+    });
   }
 
   @override
@@ -30,7 +33,7 @@ class ArticlesScreenState extends State<ArticlesScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text("Error: ${snapshot.error}"));
+            return Center(child: Text("Error: \${snapshot.error}"));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(child: Text("No hay artículos disponibles"));
           } else {
@@ -51,7 +54,7 @@ class ArticlesScreenState extends State<ArticlesScreen> {
                           height: 50,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) =>
-                              Icon(Icons.broken_image, size: 50),
+                              const Icon(Icons.broken_image, size: 50),
                         ),
                         title: Text(article.title),
                         subtitle: Text(article.description),
@@ -61,8 +64,6 @@ class ArticlesScreenState extends State<ArticlesScreen> {
                             color: isFavorite ? Colors.red : Colors.grey,
                           ),
                           onPressed: () {
-                            // ignore: avoid_print
-                            print("🛠 Favorito tocado: ${article.title}");
                             favoritesProvider.toggleFavorite(article);
                           },
                         ),

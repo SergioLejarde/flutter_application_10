@@ -22,7 +22,7 @@ class DbHelper {
             id INTEGER PRIMARY KEY,
             title TEXT,
             description TEXT,
-            imageUrl TEXT
+            image_url TEXT
           )
         ''');
       },
@@ -32,14 +32,19 @@ class DbHelper {
   // 🛠 Añadir artículo a favoritos
   Future<void> addFavorite(Article article) async {
     final db = await database;
-    await db.insert("favorites", article.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert(
+      "favorites",
+      article.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    print("✅ Favorito guardado en SQLite: ${article.title} (${article.id})");
   }
 
   // ❌ Eliminar artículo de favoritos
-  Future<void> removeFavorite(int id) async {
+  Future<void> removeFavorite(int articleId) async {
     final db = await database;
-    await db.delete("favorites", where: "id = ?", whereArgs: [id]);
+    await db.delete("favorites", where: "id = ?", whereArgs: [articleId]);
+    print("❌ Favorito eliminado de SQLite: ID $articleId");
   }
 
   // 🔄 Obtener todos los favoritos
@@ -47,12 +52,14 @@ class DbHelper {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query("favorites");
 
+    print("🗂 Favoritos guardados en SQLite: $maps"); // Debugging info
+
     return List.generate(maps.length, (i) {
       return Article(
         id: maps[i]['id'],
         title: maps[i]['title'],
         description: maps[i]['description'],
-        imageUrl: maps[i]['imageUrl'],
+        imageUrl: maps[i]['image_url'],
       );
     });
   }
