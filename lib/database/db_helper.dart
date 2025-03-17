@@ -13,20 +13,30 @@ class DbHelper {
 
   Future<Database> _initDB() async {
     final path = join(await getDatabasesPath(), 'favorites.db');
-    return await openDatabase(
-      path,
-      version: 1,
-      onCreate: (db, version) async {
-        await db.execute('''
-          CREATE TABLE favorites (
-            id INTEGER PRIMARY KEY,
-            title TEXT,
-            description TEXT,
-            image_url TEXT
-          )
-        ''');
-      },
-    );
+    print("📂 Intentando inicializar la base de datos en: $path"); // 🛠 Imprime la ruta
+
+    try {
+      final db = await openDatabase(
+        path,
+        version: 1,
+        onCreate: (db, version) async {
+          await db.execute('''
+            CREATE TABLE IF NOT EXISTS favorites (
+              id INTEGER PRIMARY KEY,
+              title TEXT,
+              description TEXT,
+              imageUrl TEXT
+            )
+          ''');
+        },
+      );
+
+      print("✅ Base de datos SQLite inicializada correctamente."); // 🟢 Confirmación
+      return db;
+    } catch (e) {
+      print("❌ Error al inicializar SQLite: $e"); // 🔴 Si hay error, lo muestra
+      rethrow;
+    }
   }
 
   // 🛠 Añadir artículo a favoritos
@@ -65,5 +75,16 @@ class DbHelper {
         imageUrl: maps[i]['image_url'],
       );
     });
+  }
+
+  // 📂 Mostrar los favoritos guardados en la base de datos
+  Future<void> printFavoritesFromDB() async {
+    final db = await database;
+    final List<Map<String, dynamic>> results = await db.query("favorites");
+
+    print("📂 Contenido de la tabla FAVORITOS en SQLite:");
+    for (var row in results) {
+      print("⭐ ID: ${row['id']}, Título: ${row['title']}, Descripción: ${row['description']}");
+    }
   }
 }
